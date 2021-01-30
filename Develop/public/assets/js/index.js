@@ -35,8 +35,6 @@ const getNotes = () =>
     if (!response.ok) {
       return alert("Error: " + response.statusText);
     }
-    // console.log(response.json());
-    // console.log(response);
     return response.json();
   });
 const saveNote = (note) =>
@@ -54,7 +52,7 @@ const saveNote = (note) =>
   });
 
 const deleteNote = (id) =>
-  fetch(`/api/notes/${id}`, {
+  fetch(`/api/notes/:${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -68,10 +66,12 @@ const renderActiveNote = () => {
     noteTitle.setAttribute("readonly", true);
     noteText.setAttribute("readonly", true);
     noteTitle.value = activeNote.title;
-    noteText.value = activeNote.title;
+    noteText.value = activeNote.text;
   } else {
     noteTitle.value = "";
     noteText.value = "";
+    noteTitle.removeAttribute("readonly");
+    noteText.removeAttribute("readonly");
   }
 };
 
@@ -127,7 +127,6 @@ const handleRenderSaveBtn = () => {
 
 // Render the list of note titles
 const renderNoteList = async (notes) => {
-  console.log(notes);
   let jsonNotes = await notes;
   if (window.location.pathname === "/notes") {
     noteList.forEach((el) => (el.innerHTML = ""));
